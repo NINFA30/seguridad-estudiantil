@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>FortiGuard - Ubicación de Emergencia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+    #ubicacion {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #333;
+    }
+    #enlaceWhatsapp {
+      display: none;
+      margin-top: 20px;
+      background-color: #25D366;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>📍 Ubicación de Emergencia</h2>
+  <div id="ubicacion">Obteniendo ubicación...</div>
+  <a id="enlaceWhatsapp" href="#" target="_blank">Enviar ubicación por WhatsApp</a>
+
+  <script>
+    function obtenerUbicacion() {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          function(pos) {
+            var lat = pos.coords.latitude.toFixed(6);
+            var lon = pos.coords.longitude.toFixed(6);
+            document.getElementById("ubicacion").innerHTML =
+              "Latitud: " + lat + "<br>Longitud: " + lon;
+
+            var mensaje = "🚨 Estoy en peligro. Mi ubicación es: https://www.google.com/maps?q=" + lat + "," + lon;
+            var numero = "59173798844"; // Reemplaza con el número de destino en formato internacional
+            var enlace = "https://wa.me/" + numero + "?text=" + encodeURIComponent(mensaje);
+
+            var boton = document.getElementById("enlaceWhatsapp");
+            boton.href = enlace;
+            boton.style.display = "inline-block";
+          },
+          function(error) {
+            let mensaje = "";
+            switch(error.code) {
+              case error.PERMISSION_DENIED:
+                mensaje = "Permiso de ubicación denegado.";
+                break;
+              case error.POSITION_UNAVAILABLE:
+                mensaje = "Ubicación no disponible.";
+                break;
+              case error.TIMEOUT:
+                mensaje = "Tiempo de espera agotado.";
+                break;
+              default:
+                mensaje = "Error desconocido.";
+            }
+            document.getElementById("ubicacion").innerHTML = mensaje;
+          }
+        );
+      } else {
+        document.getElementById("ubicacion").innerHTML = "Tu navegador no soporta geolocalización.";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", obtenerUbicacion);
+  </script>
+</body>
+</html>
