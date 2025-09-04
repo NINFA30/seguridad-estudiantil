@@ -1,0 +1,2 @@
+# seguridad-estudiantil
+ubicacion georeferenciable
